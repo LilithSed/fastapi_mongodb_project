@@ -1,0 +1,17 @@
+services:
+  setup:
+    container_name: SETUP
+    build:
+      context: .
+      dockerfile: ops/docker/Dockerfile
+      args:
+        PROJECT_ID: ${PROJECT_ID}
+
+    # This allows us to hot-reload without breaking the library imports
+    # when mounting everything
+    volumes:
+        - ./:/usr/src
+    env_file:
+      - .env
+    ports:
+      - "82:8000"

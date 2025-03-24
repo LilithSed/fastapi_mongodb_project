@@ -1,0 +1,105 @@
+repos:
+  # General git checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    # Removes unnecessary whitespace at the end of lines, improving code readability and
+    # preventing potential issues in certain editors.
+    - id: trailing-whitespace
+      stages: [commit, manual]
+
+    # Ensures files end with a newline, providing consistency across codebases and conforming to
+    # POSIX standards for better interoperability.
+    - id: end-of-file-fixer
+      stages: [commit, manual]
+
+    # Validates YAML files' syntax and structure, preventing potential issues caused by improperly
+    # formatted configuration files.
+    - id: check-yaml
+      stages: [commit, manual]
+
+    # Prevents committing large files that can slow down repository performance, ensuring the repo
+    # stays lightweight and manageable.
+    - id: check-added-large-files
+      stages: [commit, manual]
+
+    # Sorts Python package requirements in a requirements.txt file alphabetically, improving
+    # readability and simplifying dependency management.
+    - id: requirements-txt-fixer
+      stages: [commit, manual]
+
+    # Adds or adjusts the encoding pragma in Python source files, ensuring compatibility with the
+    # Python interpreter across different encodings.
+    - id: fix-encoding-pragma
+      stages: [commit, manual]
+
+    # Identifies accidentally committed private keys, protecting sensitive information from being
+    # exposed in public repositories.
+    - id: detect-private-key
+      stages: [commit, manual]
+
+    # Verifies that scripts with a shebang are marked as executable, ensuring proper script
+    # execution in Unix-based systems.
+    - id: check-shebang-scripts-are-executable
+      stages: [commit, manual]
+
+    # Detects filename conflicts that arise due to case-insensitive filesystems, preventing issues
+    # in cross-platform projects.
+    - id: check-case-conflict
+      stages: [commit, manual]
+
+  # Enforces a consistent code formatting style throughout the project, improving code readability
+  # and reducing formatting-related discussions during code reviews.
+  - repo: https://github.com/psf/black
+    rev: 24.3.0
+    hooks:
+    - id: black
+      language_version: python3.12
+      stages: [commit, manual]
+
+  # Checks Python code for adherence to PEP 8 style guidelines, potential programming errors, and
+  # code complexity, helping maintain code quality.
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+    - id: flake8
+      exclude: .git,__pycache__,docs/source/conf.py,old,build,dist
+      args: ["--extend-ignore=E501,W605,E203"]
+      language_version: python3.12
+      stages: [commit, manual]
+
+  # Scans Python dependencies for known security vulnerabilities, alerting developers to potential
+  # risks and helping ensure a secure application.
+  - repo: https://github.com/twu/skjold
+    rev: v0.6.1
+    hooks:
+    - id: skjold
+      verbose: true
+      stages: [commit, manual]
+
+  # Analyzes Python code complexity using Radon, ensuring that the code meets a specified
+  # complexity threshold before allowing commits, promoting maintainable and readable code.
+  - repo: local
+    hooks:
+      - id: radon-check
+        name: radon-check
+        language: system
+        entry: ./ops/scripts/radon_check.sh
+        types: [python]
+        verbose: true
+        fail_fast: true
+        stages: [commit, manual]
+
+  # Running Pytest with coverage for unit, integration, and e2e tests ensures code correctness,
+  # verifies functionality at multiple levels, and measures test effectiveness, promoting robust
+  # applications.
+  # - repo: local
+  #   hooks:
+  #     - id: run-tests
+  #       name: run-tests
+  #       entry: make docker-pytest-run
+  #       language: system
+  #       pass_filenames: false
+  #       always_run: true
+  #       verbose: true
+  #       stages: [commit]

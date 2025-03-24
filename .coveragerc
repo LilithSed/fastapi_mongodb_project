@@ -1,0 +1,53 @@
+[run]
+# Include your source code directory
+source = ./main
+
+# Whether to measure branch coverage in addition to statement coverage
+branch = True
+
+# Exclude patterns for files/directories
+# Files that are excluded from unit tests are constants by nature
+# or generate dummy data that are used in tests
+omit =
+    */__init__.py
+    */tests/*
+    */migrations/*
+    */venv/*
+    */site-packages/*
+    ./main/api/constants/*
+    ./main/api/translations/*
+
+[report]
+# Exclude lines that match these regexes when calculating coverage
+exclude_lines =
+    # Re-enable the standard pragma
+    pragma: no cover
+
+    # Omit the usual debugging code
+    def __repr__
+    if self\.debug
+
+    # Exclude defensive code blocks
+    raise AssertionError
+    raise NotImplementedError
+
+    # Non-runnable code
+    if 0:
+    if __name__ == .__main__.:
+
+    # Abstract methods in classes
+    @(abc\.)?abstractmethod
+
+# Threshold below which coverage will be considered a failure in CI/CD
+fail_under = 20
+
+# Highlight which parts of code are considered covered
+show_missing = True
+
+[html]
+# Directory where HTML report will be saved
+directory = htmlcov
+show_contexts = True
+
+# Title for the HTML report
+title = Setup - Coverage Report
